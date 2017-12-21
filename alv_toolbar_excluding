@@ -1,0 +1,17 @@
+  APPEND cl_gui_alv_grid=>mc_fc_detail TO lt_exclude.
+*    APPEND cl_gui_alv_grid=>mc_fc_sort_asc TO lt_exclude.
+*    APPEND cl_gui_alv_grid=>mc_fc_sort_dsc TO lt_exclude.
+*    APPEND cl_gui_alv_grid=>mc_fc_find TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_find_more TO lt_exclude.
+*    APPEND cl_gui_alv_grid=>mc_mb_filter TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_mb_subtot TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_print TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_mb_view TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_mb_export TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_graph TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_loc_delete_row TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_loc_insert_row TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_loc_move_row TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_loc_append_row TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_loc_copy_row TO lt_exclude.
+  APPEND cl_gui_alv_grid=>mc_fc_refresh TO lt_exclude.
