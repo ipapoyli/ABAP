@@ -1,5 +1,11 @@
 *----------------------------------------------------------------------*
 *----------------------------------------------------------------------*
+data  gt_fieldcat_o TYPE lvc_t_fcat,
+      gt_fieldcat_b TYPE lvc_t_fcat,
+      gs_fieldcat   TYPE lvc_s_fcat,
+      gs_layout_o   TYPE lvc_s_layo,
+      gs_layout_b   TYPE lvc_s_layo.
+
 DATA: alv_container TYPE REF TO cl_gui_docking_container,
       alv_grid_o    TYPE REF TO cl_gui_alv_grid,
       alv_grid_b    TYPE REF TO cl_gui_alv_grid.
