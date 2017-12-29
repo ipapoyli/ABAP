@@ -63,4 +63,21 @@ DATA:
       i_parent = dg_parent_grid_b.
 *----------------------------------------------------------------------*
 *----------------------------------------------------------------------*
-*----------------------------------------------------------------------*
+    CALL METHOD alv_grid_o->set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        is_layout       = gs_layout_o
+      CHANGING
+        it_fieldcatalog = gt_fieldcat_o
+        it_outtab       = itab_o[].
+
+    CALL METHOD alv_grid_b->set_table_for_first_display
+      EXPORTING
+        i_save               = 'A'
+        is_layout            = gs_layout_b
+        it_toolbar_excluding = lt_exclude
+      CHANGING
+        it_fieldcatalog      = gt_fieldcat_b
+        it_outtab            = itab_b[].
+        
+        *----------------------------------------------------------------------*
