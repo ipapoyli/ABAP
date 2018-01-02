@@ -91,6 +91,12 @@ data  GV_COUNTER_CHAR(30).
 CLASS LCL_EVENT_RECEIVER DEFINITION.
   PUBLIC SECTION.
     METHODS:
+      HANDLE_TOOLBAR FOR EVENT TOOLBAR OF CL_GUI_ALV_GRID
+        IMPORTING E_OBJECT E_INTERACTIVE,
+
+      HANDLE_USER_COMMAND FOR EVENT USER_COMMAND OF CL_GUI_ALV_GRID
+        IMPORTING E_UCOMM,
+    
       HANDLE_HOTSPOT_CLICK FOR EVENT HOTSPOT_CLICK OF CL_GUI_ALV_GRID
         IMPORTING E_ROW_ID E_COLUMN_ID ES_ROW_NO,
 
@@ -103,6 +109,47 @@ ENDCLASS.
 *----------------------------------------------------------------------*
 CLASS LCL_EVENT_RECEIVER IMPLEMENTATION.
 
+*----------------------------------------------------------------------*
+  METHOD handle_toolbar.
+
+    DATA: lv_toolbar TYPE stb_button.
+* Push Button Create txt
+    CLEAR lv_toolbar.
+    MOVE 'CTXT' TO lv_toolbar-FUNCTION.
+    MOVE TEXT-c01 TO lv_toolbar-TEXT.
+    MOVE TEXT-c02 TO lv_toolbar-quickinfo.
+    MOVE icon_create_text TO lv_toolbar-ICON.
+    MOVE ' ' TO lv_toolbar-disabled.
+    APPEND lv_toolbar TO e_object->mt_toolbar.
+
+  ENDMETHOD.
+*----------------------------------------------------------------------*
+* User Command
+  METHOD handle_user_command.
+    CASE e_ucomm.
+    WHEN 'CTXT'.
+
+      PERFORM select_rows.
+
+      IF gv_lines NE 0.
+        REFRESH my_file.
+        CLEAR val_string.
+        CLEAR gv_seq_order.
+
+        PERFORM get_first_line_data_di.
+        PERFORM get_middle_line_data_di.
+        PERFORM get_last_line_di.
+
+        PERFORM popup_confirm USING payment_method.
+*
+      ELSE.
+        MESSAGE TEXT-e02 TYPE 'S' DISPLAY LIKE 'e' .
+      ENDIF.
+
+    ENDCASE.
+  ENDMETHOD.
+
+*----------------------------------------------------------------------*
 * Hotspot click control
   METHOD HANDLE_HOTSPOT_CLICK.
     CLEAR ITAB.
