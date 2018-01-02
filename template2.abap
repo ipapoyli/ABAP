@@ -130,22 +130,10 @@ CLASS LCL_EVENT_RECEIVER IMPLEMENTATION.
     WHEN 'CTXT'.
 
       PERFORM select_rows.
-
       IF gv_lines NE 0.
-        REFRESH my_file.
-        CLEAR val_string.
-        CLEAR gv_seq_order.
-
-        PERFORM get_first_line_data_di.
-        PERFORM get_middle_line_data_di.
-        PERFORM get_last_line_di.
-
-        PERFORM popup_confirm USING payment_method.
-*
       ELSE.
         MESSAGE TEXT-e02 TYPE 'S' DISPLAY LIKE 'e' .
       ENDIF.
-
     ENDCASE.
   ENDMETHOD.
 
