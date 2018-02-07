@@ -1,0 +1,35 @@
+*$*$----------------------------------------------------------------$*$* 
+*$ Correction Inst.         0120061532 0000322061                     $*
+*$--------------------------------------------------------------------$*
+*$ Valid for       :                                                  $*
+*$ Software Component   SAP_APPL   SAP Application                    $*
+*$  Release 46B          All Support Package Levels                   $*
+*$  Release 46C          All Support Package Levels                   $*
+*$--------------------------------------------------------------------$*
+*$ Changes/Objects Not Contained in Standard SAP System               $*
+*$*$----------------------------------------------------------------$*$*
+*&--------------------------------------------------------------------*
+*& Object          REPS FV45PF0C_CROSS_SELL_SELECTION
+*& Object Header   PROG FV45PF0C_CROSS_SELL_SELECTION
+*&--------------------------------------------------------------------*
+*& FORM CROSS_SELL_SELECTION
+*&--------------------------------------------------------------------*
+...
+* Wirkstoffabwicklung
+  IF NOT VBAP-KZFME IS INITIAL.
+    DA_GRUND = CHAR7.
+  ENDIF.
+*>>>> START OF DELETION <<<<<
+* Position ohne Einteilung
+  IF TVAP-ETERL IS INITIAL.
+    DA_GRUND = CHAR8.
+  ENDIF.
+*>>>> END OF DELETION <<<<<<<
+*>>>> START OF INSERTION <<<<
+* Position ohne Einteilung
+*  IF TVAP-ETERL IS INITIAL.
+*    DA_GRUND = CHAR8.
+*  ENDIF.
+*>>>> END OF INSERTION <<<<<<
+...
+*&--------------------------------------------------------------------*
