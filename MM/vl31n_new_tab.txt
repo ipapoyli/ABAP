@@ -1,0 +1,147 @@
+http://saptechnical.com/Tutorials/ExitsBADIs/VL01N/Index.htm
+
+For Additional tab at Delivery Header level we will use the BADI   LE_SHP_TAB_CUST_HEAD, 
+for Item level we will use the BADI, LE_SHP_TAB_CUST_ITEM
+Following screenshots describes step-by-step method to create additional tab at VL01N (Delivery) header level
+
+1.     Go to transaction SE11
+
+2.     Give LIKP & Press Display
+
+3.     Press the append structure for LIKP.
+
+4.     Press Create Button.
+
+5.     Create Structure as per the requirement & activate it.  
+
+6.     You can see the append structure in the LIKP table
+
+7.     Go to SE80 Transaction  
+
+8.     Select Function group &  give the name for Function group and press enter
+
+9.     Give the Function group name & create it.
+
+10.  Go to TOP include
+Declare the variables at TOP include
+FUNCTION-POOL ZSD537_HEAD.                  "MESSAGE-ID ..
+DATA: gv_full      TYPE  zzful ,
+      gv_partial   TYPE  zzpartial ,
+      gv_veh_no    TYPE  zzveh_no  ,
+      gv_lr_dkt_no TYPE  zzlr_dkt_no ,
+      gv_lr_dkt_dt TYPE  zzlr_dkt_dt ,
+      gv_driver    TYPE  zzdriver  ,
+      gv_inote_num TYPE  zzinote_num ,
+      gv_inote_dt  TYPE  zzinote_dt  ,
+      gv_inote_cntr TYPE zz_inote_cntr ,
+      gv_trnsp      TYPE zztrnsp.
+      
+11.  Save & Activate the TOP.
+
+12.  Create the Function Module to get values from screen
+
+13.  Give the Function Group Name & Function Module Name
+
+14.  Give the Export parameter as below  
+
+15.  In the source code write the code as given below. This Function Module is to get values from the screen.
+Code
+cs_likp-zzfull     = gv_full.
+cs_likp-zzpartial  = gv_partial.
+cs_likp-zzveh_no   = gv_veh_no.
+cs_likp-zzlr_dkt_no = gv_lr_dkt_no.
+cs_likp-zzlr_dkt_dt = gv_lr_dkt_dt.
+cs_likp-zzdriver    = gv_driver.
+cs_likp-zzinote_num = gv_inote_num .
+cs_likp-zzinote_dt  = gv_inote_dt.
+cs_likp-zzinote_cntr = gv_inote_cntr.
+cs_likp-zztrnsp      = gv_trnsp.
+
+16.Create another FM to set values to screen  
+
+16.  This Function Module is to set values to the screen
+
+17.  Write the code as below.
+Code
+gv_full       = is_likp-zzfull  .
+gv_partial    = is_likp-zzpartial .
+gv_veh_no     = is_likp-zzveh_no  .
+gv_lr_dkt_no  = is_likp-zzlr_dkt_no.
+gv_lr_dkt_dt  = is_likp-zzlr_dkt_dt .
+gv_driver     = is_likp-zzdriver .
+gv_inote_num  = is_likp-zzinote_num .
+gv_inote_dt   = is_likp-zzinote_dt .
+gv_inote_cntr = is_likp-zzinote_cntr.
+gv_trnsp      = is_likp-zztrnsp.
+
+18.  Save & Activate the Function Group.
+
+19.  Create new screen under the function group.
+
+20.  Give Screen Number
+
+21.  Give Screen description and select it as sub screen
+
+22.  Go to Layout.
+
+23.  Select the values from Dictionary/Program
+
+24.  Get it from Program
+
+25.  Pull the values to the screen
+
+26. Create label for each screen fields
+
+27.  Adjust the screen Layout as per the requirement and activate it.
+
+28.  Go to Transaction SE18.
+
+28. Give the BADI Name LE_SHP_TAB_CUST_HEAD
+
+29. Create Implementation for the BADI.
+
+30. Give the BADI name
+
+31. Go to Active Tab Page
+
+32. Put your code.
+  ef_caption = text-000. “ Screen Caption
+  ef_program = 'SAPLZSD537_HEAD'.         “SAPL Followed by the Function group created ZSD537_HEAD
+  ef_position = 4. “ Tab Position
+  ef_dynpro  = '9000'. “ Screen Number
+  cs_v50agl_cust = 'X'.
+  
+33. Text elements
+
+34. Activate the method.
+
+35. Go to method Transfer Data to Sub screen
+
+36. Call the SET Function Module 
+  METHOD if_ex_le_shp_tab_cust_head~transfer_data_to_subscreen.
+    CALL FUNCTION 'ZTK_MM_GET_DATA_TENDER_HEAD'
+      EXPORTING
+        is_likp = is_likp.
+  ENDMETHOD.
+
+37. Go to method Transfer Data From Sub screen
+
+38. Call the Function Module, Get data from screen
+  method IF_EX_LE_SHP_TAB_CUST_HEAD~TRANSFER_DATA_FROM_SUBSCREEN.
+    CALL FUNCTION 'ZTK_MM_GET_DATA_TENDER_HEAD'
+      EXPORTING
+        iS_LIKP       = cs_likp
+      importing
+       CS_LIKP        = cs_likp.
+  endmethod.
+
+39. Activate BADI Implementation.
+
+40. Go to Header Details
+
+41. Go to the tab Additional Data.
+
+Similarly we can use the BADI LE_SHP_TAB_CUST_ITEM & append structure at LIPS item table for item screen tab at Delivery screen.
+  
+  
+ 
