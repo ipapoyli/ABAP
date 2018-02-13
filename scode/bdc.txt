@@ -1,0 +1,77 @@
+1) recording  shdb 
+
+2) create programm shdb 
+
+3) Data
+
+DATA : uplog_tab TYPE TABLE OF uplog_typ.
+DATA : uplog_wa  TYPE uplog_typ.
+
+*----------------------------------------------------------------------*
+* BDC Variables                                                        *
+*----------------------------------------------------------------------*
+DATA: messtab LIKE bdcmsgcoll OCCURS 0 WITH HEADER LINE.
+DATA: bdcdata LIKE bdcdata    OCCURS 0 WITH HEADER LINE.
+
+DATA: ext_return TYPE TABLE OF bapiret2 WITH HEADER LINE.
+
+DATA: c_mode.
+*----------------------------------------------------------------------*
+
+4) code
+   PERFORM bdc_dynpro      USING
+   PERFORM bdc_field       USING
+   .
+   .
+   .
+   .
+   
+   
+  CLEAR: messtab, messtab[].
+  c_mode = 'A'.
+  
+   CALL TRANSACTION 'FB02' USING bdcdata
+                           MODE c_mode
+                           UPDATE 'S'
+                           MESSAGES INTO messtab.
+                           
+ CLEAR messtab.
+ READ TABLE messtab WITH KEY msgtyp = 'E'.
+
+IF sy-subrc = 0.
+  CLEAR ext_return[].
+  CALL FUNCTION 'CONVERT_BDCMSGCOLL_TO_BAPIRET2'
+                  TABLES
+                    imt_bdcmsgcoll = messtab
+                    ext_return     = ext_return.
+
+  CLEAR uplog_wa.
+  uplog_wa-msgid = ext_return-id.
+  uplog_wa-msgty = ext_return-type.
+  uplog_wa-msgno = ext_return-number.
+  APPEND uplog_wa TO uplog_tab.
+ 
+ endif.
+ 
+ 
+ 
+ *----------------------------------------------------------------------*
+*        Start new screen                                              *
+*----------------------------------------------------------------------*
+FORM bdc_dynpro USING program dynpro.
+  CLEAR bdcdata.
+  bdcdata-program  = program.
+  bdcdata-dynpro   = dynpro.
+  bdcdata-dynbegin = 'X'.
+  APPEND bdcdata.
+ENDFORM.                    "bdc_dynpro
+
+*----------------------------------------------------------------------*
+*        Insert field                                                  *
+*----------------------------------------------------------------------*
+FORM bdc_field USING fnam fval.
+  CLEAR bdcdata.
+  bdcdata-fnam = fnam.
+  bdcdata-fval = fval.
+  APPEND bdcdata.
+ENDFORM.
