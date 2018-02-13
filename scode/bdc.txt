@@ -2,7 +2,18 @@
 
 2) create programm shdb 
 
-3) Data
+3) 
+* message type
+TYPES : BEGIN OF uplog_typ,
+          msgid  LIKE sy-msgid,
+          msgty  LIKE sy-msgty,
+          msgno  LIKE sy-msgno,
+          msgv1  LIKE sy-msgv1,
+          msgv2  LIKE sy-msgv2,
+          msgv3  LIKE sy-msgv3,
+          msgv4  LIKE sy-msgv4,
+          lineno LIKE mesg-zeile,
+        END OF uplog_typ.
 
 DATA : uplog_tab TYPE TABLE OF uplog_typ.
 DATA : uplog_wa  TYPE uplog_typ.
