@@ -5,6 +5,7 @@ SET COUNTRY 'US'
 
 IF &NEXTPAGE& = '0'  endif.
 
+
 &TOTAL_DISC(I11.2)&
 &line_up_kpein(C)&
 gi_alt_qty(ICZ)
