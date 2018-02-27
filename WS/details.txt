@@ -1,0 +1,27 @@
+_______________________________________________________
+Create web service
+
+1) fm attributes  remote-enabled module 
+2) create enterprice services 
+3) se80 service definition - configuration - security profile - authentication - profile medium 
+4) soamanager - create service - 
+                     provider security - Transport level security - SSL
+                                       - Message Level Security - none 
+                                       - Transport Channel Authentication - user id/password
+5) 
+_________________________________________________
+
+
+Change web service 
+
+1) soamanager - Web Service Configuration - Object Name 
+    delete 
+    
+2) se80 repository - enterprise Services 
+    delete 
+    
+3) create again enterprice service 
+
+__________________________________________________________
+
+
