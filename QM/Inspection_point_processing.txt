@@ -1,0 +1,81 @@
+Inspection point processing
+
+f4 custom fields  
+
+fm : QAPP_CUST_IP_F4 
+ench: DATA: t_aufm LIKE TABLE OF aufm WITH HEADER LINE.
+DATA: t_adrp      LIKE TABLE OF adrp WITH HEADER LINE.
+DATA: t_usr21     LIKE TABLE OF usr21 WITH HEADER LINE.
+DATA: w_obj       LIKE bapi_pp_order_objects,
+      w_return    LIKE bapiret2,
+      w_operation LIKE bapi_order_operation1 OCCURS 0 WITH HEADER LINE.
+
+DATA lt_spoint TYPE TABLE OF ztk_qm_sampoint WITH HEADER LINE.
+
+
+BREAK ccc00252.
+
+w_obj-operations = 'X'.
+
+CALL FUNCTION 'BAPI_PRODORD_GET_DETAIL'
+  EXPORTING
+    number        = i_qals-aufnr
+    order_objects = w_obj
+  IMPORTING
+    return        = w_return
+  TABLES
+    operation     = w_operation.
+
+
+REFRESH t_tq79_f4_values.
+CLEAR t_tq79_f4_values.
+
+IF i_qapp_user_field = '1'.
+  REFRESH t_usr21.
+  SELECT * FROM usr21 INTO CORRESPONDING FIELDS OF TABLE t_usr21.
+
+  LOOP AT t_usr21.
+    t_tq79_f4_values-userfield = t_usr21-bname.
+    SELECT SINGLE name_text FROM adrp INTO t_tq79_f4_values-shorttext
+    WHERE persnumber = t_usr21-persnumber.
+    APPEND t_tq79_f4_values.
+  ENDLOOP.
+ENDIF.
+
+
+*IF i_qapp_user_field = '2'.
+*  LOOP AT w_operation.
+*    t_tq79_f4_values-userfield = w_operation-work_center.
+*    t_tq79_f4_values-shorttext = w_operation-work_center_text.
+*    APPEND t_tq79_f4_values.
+*  ENDLOOP.
+*ENDIF.
+*
+*IF i_qapp_user_field = '3'.
+*
+*  REFRESH t_aufm.
+*
+*  SELECT * FROM aufm INTO CORRESPONDING FIELDS OF TABLE t_aufm
+*  WHERE aufnr = i_qals-aufnr AND
+*  bwart = '101'.
+*
+*  LOOP AT t_aufm.
+*    t_tq79_f4_values-userfield = t_aufm-charg.
+*    t_tq79_f4_values-shorttext = t_aufm-aufnr.
+*    APPEND t_tq79_f4_values.
+*  ENDLOOP.
+*
+*ENDIF.
+
+IF i_qapp_user_field = '4'.
+  REFRESH lt_spoint.
+  SELECT * FROM ztk_qm_sampoint INTO TABLE lt_spoint.
+  LOOP AT lt_spoint.
+    t_tq79_f4_values-userfield = lt_spoint-code.
+    t_tq79_f4_values-shorttext = lt_spoint-description.
+
+    APPEND t_tq79_f4_values.
+
+  ENDLOOP.
+
+ENDIF.
