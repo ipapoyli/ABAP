@@ -1,0 +1,95 @@
+
+need smod cmod
+
+
+*&---------------------------------------------------------------------*
+EXIT_SAPLV60B_002
+*&---------------------------------------------------------------------*
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZXVVFU02
+*&---------------------------------------------------------------------*
+DATA ls_setid TYPE sethier-setid.
+DATA lt_rgsb4 TYPE TABLE OF rgsb4 WITH HEADER LINE.
+DATA f_zterm(1).
+DATA lv_wadat_ist TYPE likp-wadat_ist.
+
+BREAK ccc00252.
+
+CALL FUNCTION 'G_SET_GET_ID_FROM_NAME'
+  EXPORTING
+    client                   = '100'
+    shortname                = 'ZTK_SD_PAYM_TERMS'
+*   OLD_SETID                =
+*   TABNAME                  =
+*   FIELDNAME                =
+*   KOKRS                    =
+*   KTOPL                    =
+*   LIB                      =
+*   RNAME                    =
+*   SETCLASS                 =
+*   CHECK_SET_EMPTY          = ' '
+*   SUPRESS_POPUP            = ' '
+*   NO_DYNAMIC_SETS          = ' '
+  IMPORTING
+    new_setid                = ls_setid
+*   SET_INFO                 =
+* TABLES
+*   T_SETS                   =
+  EXCEPTIONS
+    no_set_found             = 1
+    no_set_picked_from_popup = 2
+    wrong_class              = 3
+    wrong_subclass           = 4
+    table_field_not_found    = 5
+    fields_dont_match        = 6
+    set_is_empty             = 7
+    formula_in_set           = 8
+    set_is_dynamic           = 9
+    OTHERS                   = 10.
+
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+
+CALL FUNCTION 'G_SET_GET_ALL_VALUES'
+  EXPORTING
+    client        = '100'
+*   FORMULA_RETRIEVAL           = ' '
+*   LEVEL         = 0
+    setnr         = ls_setid
+*   VARIABLES_REPLACEMENT       = ' '
+*   TABLE         = ' '
+*   CLASS         = ' '
+*   NO_DESCRIPTIONS             = 'X'
+*   NO_RW_INFO    = 'X'
+*   DATE_FROM     =
+*   DATE_TO       =
+*   FIELDNAME     = ' '
+  TABLES
+    set_values    = lt_rgsb4
+  EXCEPTIONS
+    set_not_found = 1
+    OTHERS        = 2.
+
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+CLEAR f_zterm.
+LOOP AT lt_rgsb4.
+  IF vbrk-zterm BETWEEN lt_rgsb4-from AND lt_rgsb4-to.
+    f_zterm = 'X'.
+    EXIT.
+  ENDIF.
+ENDLOOP.
+
+IF f_zterm EQ 'X'.
+  clear lv_wadat_ist.
+  SELECT SINGLE wadat_ist FROM likp INTO lv_wadat_ist
+    where vbeln eq vbrk-vbeln.
+
+    xaccit-zfbdt = lv_wadat_ist.
+ENDIF.
