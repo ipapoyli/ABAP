@@ -64,3 +64,17 @@ DATA(ls_line3) = CORRESPONDING line2   ( BASE ( ls_line2 ) ls_line1 ).
 *******
 DATA lv_output TYPE string.
 CONCATENATE ‘Hello’ ‘world’ INTO lv_output SEPARATED BY space.       or   DATA(lv_out) = |Hello| & | | & |world|.
+
+*********
+DATA(gt_citys) = VALUE ty_citys( FOR ls_ship IN gt_ships ( ls_ship–city ) ).
+
+DATA(gt_citys) = VALUE ty_citys( FOR ls_ship IN gt_ships WHERE ( route = ‘R0001’ ) ( ls_ship–city ) ).
+
+DATA(gt_itab) = VALUE ty_tab( FOR j = 11 THEN j + 10 UNTIL j > 40 ( col1 = j col2 = j + 1 col3 = j + 2  ) ).
+
+DATA(lv_lines) = REDUCE i( INIT x = 0 FOR wa IN gt_itab WHERE( F1 = ‘XYZ’ ) NEXT x = x + 1 ).
+
+DATA(lv_sum) = REDUCE i( INIT x = 0 FOR wa IN itab NEXT x = x + wa ).
+
+*******
+
