@@ -1,0 +1,19 @@
+ 
+Once your report display output in ALV grid format.
+ 
+=> Press CTRL+SHIFT+F10
+       This function your ALV grid ouput format changes to list format
+ 
+=> Press CTRL+SHIFT+F7
+       It will open a dialog box with the options
+      Select EXCEL (In MHTML Format option)
+       Press Enter / Click on continue
+ 
+=> Now it will open dialog box to which location need to be store the file.
+     Specify the file name and select the location to be store in your local system
+ 
+=> Then it will open automatically once it's saved.
+     If you want to open from your local system
+ 
+        Select the file -> Right Click -> Open with -> Microsoft Excel
+ 
