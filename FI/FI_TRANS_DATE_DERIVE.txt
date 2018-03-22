@@ -1,0 +1,16 @@
+se18 
+
+badi name FI_TRANS_DATE_DERIVE 
+
+implementation create 
+
+  interface 
+   method IF_EX_FI_TRANS_DATE_DERIVE~DERIVE_WWERT.
+      break ccc00252.
+
+      check FLT_VAL = 'GR'.
+      E_WWERT = I_BLDAT.
+    endmethod.
+  
+  
+  // activate 
