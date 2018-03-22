@@ -1,0 +1,12 @@
+
+SAPMV45A program
+
+screen number  8309 // create fields 
+
+
+PBO Modules in ABAP Include MV45AO0Z
+
+PAI Modules in ABAP Include MV45AI0Z
+
+
+
