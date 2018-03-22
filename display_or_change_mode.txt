@@ -1,0 +1,11 @@
+
+if T180-TRTYP  eq 'A'.  " display    
+        loop at SCREEN.
+          IF SCREEN-name eq 'VBAK-ZZIMPRT'.
+             SCREEN-INPUT = ''.
+             MODIFY SCREEN.
+          endif.
+        endloop.
+endif.
+
+T180-TRTYP  eq 'V'      " change mode 
