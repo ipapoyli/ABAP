@@ -8,7 +8,7 @@ PBO Modules in ABAP Include MV45AO0Z
 
 PAI Modules in ABAP Include MV45AI0Z
 
-
+Create Enhancement for saving additional in MV45AFZZ.
 
 
 https://www.saptutorial.org/how-to-add-custom-field-in-additional-b-tab-for-sap-sales-order/
