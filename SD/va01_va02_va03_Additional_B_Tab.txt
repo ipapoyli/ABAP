@@ -10,3 +10,7 @@ PAI Modules in ABAP Include MV45AI0Z
 
 
 
+
+https://www.saptutorial.org/how-to-add-custom-field-in-additional-b-tab-for-sap-sales-order/
+
+
