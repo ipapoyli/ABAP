@@ -1,0 +1,5 @@
+How to Create you own Number Range SNRO
+
+http://www.erpworkbench.com/sap-tcodes/snro.htm
+
+https://wiki.scn.sap.com/wiki/display/ABAP/How+to+Create+you+own+Number+Range++SNRO
