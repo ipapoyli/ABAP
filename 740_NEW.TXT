@@ -1,0 +1,137 @@
+CONSTANTS: lc_scary1 TYPE STRING VALUE 'SLIGHTLY SCARY',
+           lc_scary2 TYPE STRING VALUE 'REALLY SCARY',
+           lc_scary3 TYPE STRING VALUE 'NORMAL'.
+           
+SELECT monster_name, monster_number
+  CASE
+    WHEN sanity <= 10 AND strength >= 75 THEN @lc_scary2
+    WHEN sanity <= 25 AND strength >= 50 THEN @lc_scary1
+    ELSE @lc_scary3
+  END AS scariness_string
+FROM zt_monsters
+WHERE monster_number = @ld_monster_number
+INTO CORRESPONDING FIELDS OF @lt_monsters.  "LAST STATEMENT 
+
+
+  ***************************************************************************************
+
+"Before
+DATA: ld_converted_strength TYPE fltp,
+      ld_converted_sanity TYPE fltp.
+      
+SELECT monster_name monster_number strength sanity
+  FROM zt_monsters
+  INTO CORRESPONDING FIELDS OF lt_monsters.
+  
+LOOP AT lt_monsters ASSIGNING <ls_monsters>.
+    ld_converted_strength = <ls_monsters>-strength.
+    ld_converted_sanity = <ls_monsters>-sanity.
+    <ls_monsters>-scary_ratio =
+            ld_converted_strength / ld_converted_sanity.
+ENDLOOP.
+
+
+Listing 2.3 Operations Inside SQL Statements: Before
+However, as of ABAP 7.4, it’s now possible to perform these operations within
+the SQL query, as shown in Listing 2.4.
+
+SELECT monster_name, monster_number
+  CAST( strength AS fltp ) / CAST( sanity AS fltp )
+    AS scary_ratio
+  FROM zt_monsters
+  WHERE monster_number = @ld_monster_number
+  INTO CORRESPONDING FIELDS OF @lt_monsters.
+  
+  
+  ***************************************************************************************
+  
+SELECT zt_monsters~*
+       zt_hats~bar_code
+  FROM zt_monsters
+  INNER JOIN zt_hats
+      ON zt_monsters~hat_size = zt_hats~hat_size
+  WHERE monster_name = 'FRED'
+  INTO DATA(lt_monsters).  " LAST STATEMENT 
+  
+  
+***************************************************************************************    
+
+DO LINES( lt_monsters[] ) TIMES.
+
+ENDDO.
+
+***************************************************************************************
+*Building Up a String Using Pipes
+
+CONCATENATE ‘Monster Number’ LD_NUMBER INTO LD_HELPER SEPARATED BY SPACE.
+CONCATENATE LD_HELPER LD_STATUS INTO LD_RESULT
+SEPARATED BY ‘ / ‘.
+
+LD_RESULT = |Monster Number { ld_number } / { ld_status }|.
+
+***************************************************************************************
+*Removing Leading Zeroes via a Formatting Option
+
+ld_message = |{ ld_delivery ALPHA = OUT }|.
+MESSAGE ld_message TYPE ‘I’.
+SELECT *
+  FROM LIKP
+  INTO CORRESPONDING FIELDS OF ls_delivery_header
+  WHERE vbeln = ld_delivery_number.
+
+***************************************************************************************
+*No Helper Variable
+
+IF STRLEN( LD_STRING ) > 10 THEN….
+
+***************************************************************************************
+*The SWITCH Statement as a Replacement for CASE
+*Filling in a Variable Using a SWITCH Statement
+
+DATA(L_DAY) = SWITCH char10( l_indicator
+        when 1 THEN 'Monday'(326)
+        when 2 THEN 'Tuesday'(327)
+        when 3 THEN 'Wednesday'(328)
+        when 4 THEN 'Thursday'(329)
+        when 5 THEN 'Friday'(330).
+        when 6 THEN 'Saturday'(331)
+        when 7 THEN 'Sunday'(332)
+      ELSE THROW zcx_day_problem( ) ).
+
+***************************************************************************************
+*The COND Statement as a Replacement for IF/ELSE
+*Using the COND Constructor Operator
+
+cs_monster_header-sanity_description =
+  COND text30(
+    WHEN cs_monster_header-sanity = 5  AND .... THEN 'VERY SANE'
+    WHEN cs_monster_header-sanity = 4 THEN 'SANE'.
+    WHEN cs_monster_header-sanity = 3 THEN 'SLIGHTLY MAD'.
+    WHEN cs_monster_header-sanity = 2 THEN 'VERY MAD'.
+    WHEN cs_monster_header-sanity = 1 THEN 'BONKERS'.
+    ELSE.
+        cs_monster_header-sanity_description = 'RENAMES SAP PRODUCTS'.
+    ENDIF.
+
+
+***************************************************************************************
+*Moving One Table to Another in 7.4 
+
+gt_green_monsters = CORRESPONDING #(
+                        gt_blue_monsters
+                          MAPPING people_scared = most_peasants_scared
+                            EXCEPT evilness ).
+                            
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+***************************************************************************************
+
+
+    
