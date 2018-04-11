@@ -1,3 +1,50 @@
+***************************************************************************************
+*Defining an Internal Table Based on the SQL Query
+
+SELECT monster_name monster_number sanity
+           FROM zt_monsters
+           WHERE monster_name = 'FRED'
+           INTO TABLE DATA(lt_monsters).
+           
+***************************************************************************************
+*Fill Internal Table
+
+DATA: lt_monsters TYPE STANDARD TABLE OF ztvc_monsters.
+
+lt_monsters = VALUE#(
+           ( monster_name = 'FRED'   monster_number = 1 )
+           ( monster_name = 'HUBERT' monster_number = 2 ) ).     
+
+***************************************************************************************
+* Filling Internal Tables from Other Tables
+
+DATA( lt_neurotic_monsters) = VALUE lt_neurotic_monsters(
+           FOR ls_monsters IN lt_all_monsters WHERE (sanity < 20 )
+                      monster_name = ls_monsters-monster_name
+                      monster_number = ls_monsters-monster_number ) ).
+
+
+***************************************************************************************
+*Reading Everything from One Table during an Inner Join        
+
+SELECT zt_monsters~*
+           zt_hats~bar_code
+           FROM zt_monsters
+           INNER JOIN zt_hats
+           ON zt_monsters~hat_size = zt_hats~hat_size
+           WHERE monster_name = 'FRED'
+           INTO DATA(lt_monsters).
+
+***************************************************************************************
+* Joining Two Tables in Ways Not Possible Before
+
+INNER JOIN zt_monster_pets
+ON zt_monster_pets~owner EQ zt_monsters~monster_number
+AND zt_monster_pets~type LIKE 'GIGANTIC%'
+AND zt_monster_pets~species IN ('SHARK','CROCODILE','DINOSAUR')
+
+***************************************************************************************
+
 CONSTANTS: lc_scary1 TYPE STRING VALUE 'SLIGHTLY SCARY',
            lc_scary2 TYPE STRING VALUE 'REALLY SCARY',
            lc_scary3 TYPE STRING VALUE 'NORMAL'.
@@ -12,9 +59,7 @@ FROM zt_monsters
 WHERE monster_number = @ld_monster_number
 INTO CORRESPONDING FIELDS OF @lt_monsters.  "LAST STATEMENT 
 
-
-  ***************************************************************************************
-
+***************************************************************************************
 "Before
 DATA: ld_converted_strength TYPE fltp,
       ld_converted_sanity TYPE fltp.
@@ -80,6 +125,7 @@ SELECT *
   WHERE vbeln = ld_delivery_number.
 
 ***************************************************************************************
+*the IF/THEN and CASE constructs you know and love keep on getting easier.
 *No Helper Variable
 
 IF STRLEN( LD_STRING ) > 10 THEN….
@@ -121,9 +167,7 @@ gt_green_monsters = CORRESPONDING #(
                         gt_blue_monsters
                           MAPPING people_scared = most_peasants_scared
                             EXCEPT evilness ).
-                            
-***************************************************************************************
-***************************************************************************************
+
 ***************************************************************************************
 ***************************************************************************************
 ***************************************************************************************
