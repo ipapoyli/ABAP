@@ -1,0 +1,99 @@
+*Modifying internal table records 
+DATA: lt_mara TYPE STANDARD TABLE OF mara.
+FIELD-SYMBOLS: <fs_mara> TYPE mara.
+SELECT * FROM mara INTO TABLE lt_mara UP TO 10 ROWS.
+LOOP AT lt_mara ASSIGNING <fs_mara>.
+  <fs_mara>-matkl = 'DEMO'.
+ENDLOOP.
+
+*********************************************************************************** 
+*Appending to internal table
+DATA: lt_mara TYPE STANDARD TABLE OF mara.
+FIELD-SYMBOLS: <fs_mara> TYPE mara.
+
+APPEND INITIAL LINE TO lt_mara ASSIGNING <fs_mara>.
+IF <fs_mara> IS ASSIGNED.
+  <fs_mara>-matnr = 'MAT1'.
+  <fs_mara>-matkl = '001'.
+  UNASSIGN <fs_mara>.
+ENDIF.
+
+APPEND INITIAL LINE TO lt_mara ASSIGNING <fs_mara>.
+IF <fs_mara> IS ASSIGNED.
+  <fs_mara>-matnr = 'MAT2'.
+  <fs_mara>-matkl = '001'.
+  UNASSIGN <fs_mara>.
+ENDIF.
+
+*********************************************************************************** 
+*Reading internal table
+
+READ TABLE lt_mara ASSIGNING <fs_mara> WITH KEY matnr = 'MAT1'.
+
+*********************************************************************************** 
+*Generic Field Symbol:
+
+FIELD-SYMBOLS: <fs_str> TYPE ANY.
+FIELD-SYMBOLS: <fs_tab> TYPE ANY TABLE.
+
+FIELD-SYMBOLS: <fs_str> TYPE ANY.
+FIELD-SYMBOLS: <fs_data> TYPE ANY.
+DATA: lw_mara TYPE mara.
+
+*********************************************************************************** 
+*Type Any : 
+
+ASSIGN lw_mara TO <fs_str>.
+IF <fs_str> IS ASSIGNED.
+  ASSIGN COMPONENT 'MATNR' OF STRUCTURE <fs_str> TO <fs_data>.
+  IF <fs_data> IS ASSIGNED.
+    <fs_data> = 'MAT001'.
+    UNASSIGN <fs_data>.
+  ENDIF.
+  UNASSIGN <fs_str>.
+ENDIF.
+
+
+*********************************************************************************** 
+*TYPE ANY TABLE:
+
+FIELD-SYMBOLS: <fs_tab> TYPE ANY TABLE.
+FIELD-SYMBOLS: <fs_str> TYPE any.
+FIELD-SYMBOLS: <fs_data> TYPE any.
+DATA: lt_mara TYPE STANDARD TABLE OF mara.
+DATA: lw_mara TYPE mara.
+
+ASSIGN lt_mara TO <fs_tab>.
+SELECT * FROM mara INTO TABLE lt_mara UP TO 10 ROWS.
+
+LOOP AT <fs_tab> ASSIGNING <fs_str>.
+  IF <fs_str> IS ASSIGNED.
+    ASSIGN COMPONENT 'MATKL' OF STRUCTURE <fs_str> TO <fs_data>.
+    IF <fs_data> IS ASSIGNED.
+      IF <fs_data> EQ '01'.
+*********** Do some processing *********
+      ENDIF.
+      UNASSIGN <fs_data>.
+    ENDIF.
+  ENDIF.
+ENDLOOP.
+
+*********************************************************************************** 
+*Reading internal table using generic field symbol:
+
+FIELD-SYMBOLS: <fs_tab> TYPE ANY TABLE.
+FIELD-SYMBOLS: <fs_str> TYPE any.
+DATA: lt_mara TYPE STANDARD TABLE OF mara.
+
+ASSIGN lt_mara TO <fs_tab>.
+SELECT * FROM mara INTO TABLE lt_mara UP TO 10 ROWS.
+
+READ TABLE <fs_tab> ASSIGNING <fs_str> WITH KEY ('MATNR') = 'MAT001'.
+
+
+*********************************************************************************** 
+*Typed Data Reference:
+
+DATA lr_num TYPE REF TO i.
+CREATE DATA lr_num.
+
