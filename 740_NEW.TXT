@@ -193,10 +193,27 @@ wa = itab[ idx ].
 wa = itab[ KEY key INDEX idx ].
 wa = itab[ col1 = … col2 = … ].
 wa = itab[ KEY key col1 = … col2 = … ].
+
+***************************************************************************************
+DATA(idx) = line_index( itab[ … ] ).
+
 ***************************************************************************************
 IF line_exists( itab[ … ] ).
 …
 ENDIF.
+
+*Seeing Whether an Internal Table Line Exists in 7.4
+IF LINE_EXISTS( lt_monsters[ monster_number = ld_monster_number ] ) = abap_false.
+           APPEND INITIAL LINE TO lt_monsters ASSIGNING <ls_monsters>.
+ELSE.
+           READ TABLE lt_monsters ASSIGNING <ls_monsters>
+                      WITH KEY monster_number = ld_monster_number.
+ENDIF.
+
+*Code All in One Line, with No Reliance on SY-SUBRC
+IF LINE_EXISTS( lt_monsters[ monster_number = ld_monster_number ] ) = abap_true.
+
+
 ***************************************************************************************
 ****
 TYPES:
@@ -218,9 +235,6 @@ ENDLOOP.
 
 DATA(lv_lines) = REDUCE i( INIT x = 0 FOR wa IN gt_itab
                     WHERE( F1 = ‘XYZ’ ) NEXT x = x + 1 ).
-
-***************************************************************************************
-DATA(idx) = line_index( itab[ … ] ).
 
 ***************************************************************************************
 
@@ -246,6 +260,21 @@ DATA(lv_lines) = REDUCE i( INIT x = 0 FOR wa IN gt_itab WHERE( F1 = ‘XYZ’ ) 
 DATA(lv_sum) = REDUCE i( INIT x = 0 FOR wa IN itab NEXT x = x + wa ).
 
 ***************************************************************************************
+** Extracting One Table from Another
+
+*Extracting One Table from Another before 7.4
+LOOP AT lt_all_monsters INTO ls_all_monsters WHERE sanity > 25
+                                               AND sanity < 75.
+           CLEAR ls_averagely_mad_monsters.
+           MOVE-CORRESPONDING ls_all_monsters TO ls_averagely_mad_monsters.
+           APPEND ls_averagely_mad_monsters TO lt_averagely_mad_monsters.
+ENDLOOP. "All Monsters
+
+*Extracting One Table from Another in 7.40
+DATA( lt_averagely_mad_monsters ) = FILTER #( lt_all_monsters USING KEY sanity
+                                                       WHERE sanity > 25 AND
+                                                             sanity < 75 ).
+
 ***************************************************************************************
 ***************************************************************************************
 ***************************************************************************************
