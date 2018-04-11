@@ -169,6 +169,17 @@ gt_green_monsters = CORRESPONDING #(
                             EXCEPT evilness ).
 
 ***************************************************************************************
+*Reading Into a Work Area and Looping Through a Table
+
+READ TABLE lt_monsters WITH KEY monster_number = ld_monster_
+number INTO DATA(ls_monsters).
+LOOP AT lt_monsters INTO DATA(ls_monsters).
+
+*Field Symbols for Work Area
+READ TABLE lt_monsters WITH KEY monster_number = ld_monster_
+number ASSIGNING FIELD-SYMBOL(<ls_monsters>).
+LOOP AT lt_monsters ASSIGNING FIELD-SYMBOL(<ls_monsters>).
+
 ***************************************************************************************
 ***************************************************************************************
 ***************************************************************************************
