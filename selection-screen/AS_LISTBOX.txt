@@ -1,0 +1,35 @@
+TYPE-POOLS : vrm.
+
+DATA : v TYPE vrm_values.
+
+DATA : vw LIKE LINE OF v.
+
+PARAMETERS : a(10) TYPE c AS LISTBOX VISIBLE LENGTH 10.
+
+INITIALIZATION.
+
+  vw-key = '1'.
+
+  vw-text = 'Jan'.
+
+  APPEND vw TO v.
+
+  vw-key = '2'.
+
+  vw-text = 'Feb'.
+
+  APPEND vw TO v.
+
+  vw-key = '3'.
+
+  vw-text = 'Mar'.
+
+  APPEND vw TO v.
+
+  CALL FUNCTION 'VRM_SET_VALUES'
+    EXPORTING
+      id              = 'A'
+      values          = v
+    EXCEPTIONS
+      id_illegal_name = 1
+      OTHERS          = 2.
