@@ -5,6 +5,7 @@ DATA BEGIN OF itab .
         a4 TYPE c LENGTH 1,
         a5 TYPE c LENGTH 1.
 
+
   DATA END OF itab.
 
   DATA: fldname1 TYPE fieldname,
